@@ -9,7 +9,7 @@ namespace TenForce_Nikunj_DeveloperExercise.Domain.DataTransferObjects
     public class PlanetDto
     {
         public string Id { get; set; }
-        public float SemiMajorAxis { get; set; }
+        public long SemiMajorAxis { get; set; }
         public ICollection<MoonDto> Moons { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TenForce_Nikunj_DeveloperExercise.Domain.Objects;
 
 namespace TenForce_Nikunj_DeveloperExercise.Constants
 {
@@ -21,5 +22,10 @@ namespace TenForce_Nikunj_DeveloperExercise.Constants
         public const string NoPlanetsFound = "No planets found.";
         public const string FileCreated = "The file is created in: ";
         public const string FolderCreated = "The folder is created in: ";
+        public const string PlanetMoonsAverageTemparature = "The Moons Average Temperature";
+        public const string NoPlanetsWithMoonsFound = "No planets with moons found.";
+        public const string PlanetswithMoonCountAndAverangeTemperature = "Planets with Moon Count And Averange Temperature:";
+        public const string LoadingDataFromAPI = "Loading Data From API....";
+        public const string DoneLoadingDataFromAPI = "Done Loading Data From API....";
     }
 }

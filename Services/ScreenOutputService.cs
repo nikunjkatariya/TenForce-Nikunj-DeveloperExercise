@@ -188,5 +188,48 @@ namespace TenForce_Nikunj_DeveloperExercise.Services
                 --------------------+--------------------------------------------------
             */
         }
+
+        public void OutputPlanetsWithMoonsAverageTemperature()
+        {
+            Console.WriteLine(OutputString.PlanetswithMoonCountAndAverangeTemperature);
+
+            //The service gets all the planets from the API.
+            var planets = _planetService.GetAllPlanets().ToArray();
+
+            //If the planets aren't found, then the function stops and tells that to the user via the console.
+            if (!planets.Where(plt => plt.HasMoons()).Any())
+            {
+                Console.WriteLine(OutputString.NoPlanetsWithMoonsFound);
+                return;
+            }
+
+            var columnSizes = new[] { 20, 30, 20, 30};
+            var columnLabels = new[]
+            {
+                OutputString.PlanetId, OutputString.PlanetSemiMajorAxis, OutputString.TotalMoons,OutputString.PlanetMoonsAverageTemparature
+            };
+
+
+            ConsoleWriter.CreateHeader(columnLabels, columnSizes);
+
+            foreach (Planet planet in planets)
+            {
+                if (planet.HasMoons())
+                {
+                    ConsoleWriter.CreateText(new string[] { $"{planet.Id}", $"{planet.SemiMajorAxis}", $"{planet.Moons.Count}", $"{planet.AverageMoonTemperature}" }, columnSizes);
+                }
+            }
+
+            ConsoleWriter.CreateLine(columnSizes);
+            ConsoleWriter.CreateEmptyLines(2);
+
+            /*
+                This is an example of the output for the planet Earth:
+                --------------------+--------------------+------------------------------+-----------------------------
+                Planet's Id         |Planet's Semi-Major Axis      |Total Moons         |Average Temperature of Moons
+                Terre               |0                             |1                   |0.0f
+                --------------------+--------------------+------------------------------+-----------------------------
+            */
+        }
     }
 }
