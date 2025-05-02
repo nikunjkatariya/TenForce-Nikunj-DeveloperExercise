@@ -12,6 +12,7 @@ using TenForce_Nikunj_DeveloperExercise.Domain.DataTransferObjects;
 using TenForce_Nikunj_DeveloperExercise.Domain.Interfaces;
 using TenForce_Nikunj_DeveloperExercise.Domain.Objects;
 using TenForce_Nikunj_DeveloperExercise.Utilities;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace TenForce_Nikunj_DeveloperExercise.Services
 {
@@ -19,14 +20,24 @@ namespace TenForce_Nikunj_DeveloperExercise.Services
     public class PlanetService : IPlanetService
     {
         private readonly HttpClientService _httpClientService;
+        private readonly IMemoryCache _cache;
+        private const string CacheKey = "AllPlanetsWithMoons";
 
-        public PlanetService(HttpClientService httpClientService)
+        public PlanetService(HttpClientService httpClientService, IMemoryCache memoryCache)
         {
             _httpClientService = httpClientService;
+            _cache = memoryCache;
         }
 
         public IEnumerable<Planet> GetAllPlanets()
         {
+            // Try to get the cached value
+            if (_cache.TryGetValue(CacheKey, out IEnumerable<Planet> cachedPlanets))
+            {
+                return cachedPlanets; // Return cached value if available
+            }
+
+            Console.WriteLine(OutputString.LoadingDataFromAPI);
             var allPlanetsWithTheirMoons = new Collection<Planet>();
 
             var response = _httpClientService.Client
@@ -67,6 +78,13 @@ namespace TenForce_Nikunj_DeveloperExercise.Services
                 }
                 allPlanetsWithTheirMoons.Add(new Planet(planet));
             }
+
+            if (allPlanetsWithTheirMoons.Any())
+            {
+                // Set the cache with a 10-minute expiration
+                _cache.Set(CacheKey, allPlanetsWithTheirMoons, TimeSpan.FromMinutes(10));
+            }
+            Console.WriteLine(OutputString.DoneLoadingDataFromAPI);
 
             return allPlanetsWithTheirMoons;
         }

@@ -14,5 +14,6 @@ namespace TenForce_Nikunj_DeveloperExercise.Domain.Interfaces
         void OutputAllPlanetsAndTheirMoonsToConsole();
         void OutputAllMoonsAndTheirMassToConsole();
         void OutputAllPlanetsAndTheirAverageMoonGravityToConsole();
+        void OutputPlanetsWithMoonsAverageTemperature();
     }
 }

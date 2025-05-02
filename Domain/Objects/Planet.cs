@@ -11,11 +11,20 @@ namespace TenForce_Nikunj_DeveloperExercise.Domain.Objects
     public class Planet
     {
         public string Id { get; set; }
-        public float SemiMajorAxis { get; set; }
+        public long SemiMajorAxis { get; set; }
         public ICollection<Moon> Moons { get; set; }
         public float AverageMoonGravity
         {
             get => 0.0f;
+        }
+
+        public float AverageMoonTemperature
+        {
+            get
+            {
+                if (Moons == null || Moons.Count == 0) return 0.0f;
+                return Moons.Average(m => m.AverageTemperature);
+            }
         }
 
         public Planet(PlanetDto planetDto)

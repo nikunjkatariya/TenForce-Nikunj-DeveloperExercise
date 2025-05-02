@@ -11,6 +11,7 @@ using TenForce_Nikunj_DeveloperExercise.Domain.DataTransferObjects;
 using TenForce_Nikunj_DeveloperExercise.Domain.Interfaces;
 using TenForce_Nikunj_DeveloperExercise.Domain.Objects;
 using TenForce_Nikunj_DeveloperExercise.Utilities;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace TenForce_Nikunj_DeveloperExercise.Services
 {
@@ -19,14 +20,23 @@ namespace TenForce_Nikunj_DeveloperExercise.Services
     {
         private readonly HttpClientService _httpClientService;
 
-
-        public MoonService(HttpClientService httpClientService)
+        private readonly IMemoryCache _cache;
+        private const string CacheKey = "AllMoons";
+        public MoonService(HttpClientService httpClientService, IMemoryCache memoryCache)
         {
             _httpClientService = httpClientService;
+            _cache = memoryCache;
         }
 
         public IEnumerable<Moon> GetAllMoons()
         {
+            // Try to get the cached value
+            if (_cache.TryGetValue(CacheKey, out IEnumerable<Moon> cachedMoons))
+            {
+                return cachedMoons; // Return cached value if available
+            }
+            Console.WriteLine(OutputString.LoadingDataFromAPI);
+
             var response = _httpClientService.Client
                 .GetAsync(UriPath.GetAllMoonsWithMassQueryParameters)
                 .Result;
@@ -52,6 +62,12 @@ namespace TenForce_Nikunj_DeveloperExercise.Services
                 allMoons.Add(new Moon(moonDto));
             }
 
+            if (allMoons.Any())
+            {
+                // Set the cache with a 10-minute expiration
+                _cache.Set(CacheKey, allMoons, TimeSpan.FromMinutes(10));
+            }
+            Console.WriteLine(OutputString.DoneLoadingDataFromAPI);
             return allMoons;
         }
     }

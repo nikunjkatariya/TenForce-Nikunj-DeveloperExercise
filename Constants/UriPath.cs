@@ -12,7 +12,7 @@ namespace TenForce_Nikunj_DeveloperExercise.Constants
         private const string BodiesUri = "/rest/bodies";
 
         public const string GetAllPlanetsWithMoonsQueryParameters =
-            BodiesUri + "?data=id,semiMajorAxis,moons,moon,rel&filter[]=isPlanet,neq,false";
+            BodiesUri + "?data=id,semiMajorAxis,moons,moon,rel&filter[]=isPlanet,eq,true";
 
         public const string GetAllMoonsWithMassQueryParameters = BodiesUri +
                                                "?data=id,mass,massValue,massExponent,massValue&filter[]=aroundPlanet,gt,null";

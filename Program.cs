@@ -28,9 +28,11 @@ class Program
 
         try
         {
+
             screenOutputService.OutputAllPlanetsAndTheirAverageMoonGravityToConsole();
             screenOutputService.OutputAllMoonsAndTheirMassToConsole();
             screenOutputService.OutputAllPlanetsAndTheirMoonsToConsole();
+            screenOutputService.OutputPlanetsWithMoonsAverageTemperature();
         }
         catch (Exception exception)
         {
@@ -48,9 +50,13 @@ class Program
         //The function configures all the services.
         XmlConfigurator.Configure(LogManager.GetRepository(Assembly.GetEntryAssembly()),
             new FileInfo(ConfigurationFileName.Logger));
+
+        serviceCollection.AddMemoryCache(); // Register the memory cache
+        
         serviceCollection.AddHttpClient<HttpClientService>();
         serviceCollection.AddSingleton<IPlanetService, PlanetService>();
         serviceCollection.AddSingleton<IOutputService, ScreenOutputService>();
         serviceCollection.AddSingleton<IMoonService, MoonService>();
+
     }
 }
